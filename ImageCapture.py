@@ -14,7 +14,7 @@ while True:
     img = drone.get_frame_read().frame()
     img = cv.resize(img, (350 , 250))
     cv.imshow("Video",img)
-    
+
 
 
 
