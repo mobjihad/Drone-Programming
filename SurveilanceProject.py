@@ -1,13 +1,15 @@
+import cv2 as cv
 import KeyInput as kp
 from djitellopy import tello
-from time import sleep
+import time
 
 kp.start()
-
+global img
 drone = tello.Tello()
 drone.connect()
 print(drone.get_battery())
 
+drone.streamon()
 
 
 def getKeyboardInput():
@@ -26,8 +28,11 @@ def getKeyboardInput():
     if kp.getKey("a"): yv = -speed
     elif kp.getKey("d"): yv = speed
 
-    if kp.getKey("t"): drone.takeoff()
+    if kp.getKey("t"): drone.takeoff(); time.sleep(3)
     elif kp.getKey("l"): drone.land()
+
+    if kp.getKey("z"):
+        cv.imwrite(f'Images/{time.time()}.jpg',img)
 
     return  [lr,fb, ud,yv]
 
@@ -36,5 +41,9 @@ while True:
 
     values = getKeyboardInput()
     drone.send_rc_control(values[0],values[1],values[2],values[3])
-    sleep(0.05)
+
+    img = drone.get_frame_read().frame()
+    img = cv.resize(img, (350, 250))
+    cv.imshow("Video", img)
+    cv.waitKey(1)
 
