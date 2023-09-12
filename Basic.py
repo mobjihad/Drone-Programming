@@ -1,7 +1,7 @@
-from djitellopy import tello
+from djitellopy import Tello
 from time import sleep
 
-drone = tello.Tello()
+drone = Tello()
 drone.connect()
 print(drone.get_battery())
 
